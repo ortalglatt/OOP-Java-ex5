@@ -1,0 +1,62 @@
+ortal.netzer
+
+
+=============================
+=      File description     =
+=============================
+* filters package: Including a Filter interface, 3 abstract classes of filter types, 12 Filter classes and "not"
+                   decorator class.
+                   SizeFilter - abstract class that GreaterFilter, SmallerFilter and BetweenFilter inherit.
+                   NameFilter - abstract class that FileFilter, ContainsFilter, PrefixFilter and SuffixFilter inherit.
+                   YesOrNoFilter - abstract class that WritableFilter, ExecutableFilter anf HiddenFilter inherit.
+                   AllFilter - the all filter class.
+                   NotFilterDecorator - a "not" decorator for the filters.
+                   All the filter classes implements the Filter interface.
+* order package: Including an Order Interface, 3 Order classes and "reverse" decorator class.
+                 AbsOrder, SizeOrder, TypeOrder - orders class that implements the Order interface.
+                 ReverseOrderDecorator - a "reverse" decorator for the orders.
+* exceptions package: Including 2 classes of exceptions - TypeTwoException and TypeOneException.
+* FilterFactory.java - a factory that gets a string and created the relevant Filter object.
+* OrderFactory.java - a factory that gets a string and created the relevant Order object.
+* Section - one commands section class.
+* ReadCommands - a class that reads the commands file and create all the sections.
+* DirectoryProcessor - runs the whole program.
+
+
+=============================
+=          Design           =
+=============================
+I decided to implement the filters and orders with an interface (one for each), so I could work with the same methods on
+all the Filters, and on all the orders. More than that, I implemented 3 abstract method that contains the common method
+for each "group" of Filters.
+
+I created a ReadCommands class, that is responsible for the reading process of the commands file, This class creates all
+the relevant Section objects.
+
+The Section class gets a filter description string, an order description string and to line numbers of teh filter and
+the order. It will create by using the factory the relevant Filter and order objects, will print warnings if needed, and
+print all the filtered files from the source directory by the asked order.
+
+The main class is the DirectoryProcessor, which create all the needed object and run the whole process. In the main
+method of this class, the program will catch TypeTwoException and print it's massage (an informative massage of the
+error).
+
+
+=============================
+=  Implementation details   =
+=============================
+I chose two implement the Order classes as a SingleTone classes, because their is no need to create the instance of any
+order more than once, and their is no problem in using the same Order object in different sections. In that way, the
+program will not create unneeded Order objects.
+
+The factories of the order and of the filter, have one static method that gets a string that describes a filter/order,
+and return the relevant filter/order if the description was legal.
+If the description wasn't legal, the order/filter constructor will raise TypeOneException, and the factory will return
+null.
+
+The sorting algorithm I used in the program is QuickSort, because this is one of the most efficient sorting algorithms.
+
+Type one exceptions are created in the filter/order constructors and caught in the filter/order factories.
+Type two exceptions in the commands file are created in the ReadCommands class. Type two exceptions in the arguments or
+I/O problems, are created in the DirectoryProcess class. all the type two exceptions are caught in the main method of
+the DirectoryProcess class.
